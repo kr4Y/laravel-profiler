@@ -1,0 +1,20 @@
+{
+    "name": "kr4y/profiler",
+    "description": "",
+    "authors": [
+        {
+            "name": "kr4Y",
+            "email": "kr4y.php@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.0.x"
+    },
+    "autoload": {
+        "psr-0": {
+            "Kr4Y\\Profiler": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
