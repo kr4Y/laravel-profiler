@@ -1,5 +1,5 @@
 <div id="profiler-report">
 
-    Report
+    Total execution time {{$totalTime}} s
 
 </div>

@@ -10,6 +10,11 @@ class Profiler {
      * @var Illuminate\View\Environment
      */
     protected $view;
+    /**
+     * Application start time
+     * @var int
+     */
+    protected $appStartTime;
 
     /**
      * Create new profiler.
@@ -19,6 +24,8 @@ class Profiler {
      */
     public function __construct(Environment $view) {
         $this->view = $view;
+
+        $this->setAppStartTime();
     }
 
     /**
@@ -26,6 +33,18 @@ class Profiler {
      * @return Illuminate\View\View
      */
     public function getReport() {
-        return $this->view->make('profiler::report');
+        $totalTime = round(microtime(true) - $this->appStartTime, 5);
+        return $this->view->make('profiler::report', compact('totalTime'));
+    }
+
+    /**
+     * Setup Laravel start time
+     * @return void
+     */
+    protected function setAppStartTime() {
+        if (defined('LARAVEL_START'))
+            $this->appStartTime = LARAVEL_START;
+        else
+            $this->appStartTime = microtime(true);
     }
 }
