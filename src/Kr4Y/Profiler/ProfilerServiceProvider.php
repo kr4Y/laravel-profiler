@@ -18,7 +18,9 @@ class ProfilerServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		//
+		$this->app['profiler'] = $this->app->share(function($app) {
+            return new Profiler;
+        });
 	}
 
 	/**
@@ -28,7 +30,7 @@ class ProfilerServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array();
+		return array('profiler');
 	}
 
 }
