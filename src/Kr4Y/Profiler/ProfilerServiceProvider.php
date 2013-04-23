@@ -12,14 +12,22 @@ class ProfilerServiceProvider extends ServiceProvider {
 	protected $defer = false;
 
 	/**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
+    public function boot() {
+        $this->package('kr4y/profiler');
+    }
+
+	/**
 	 * Register the service provider.
 	 *
 	 * @return void
 	 */
-	public function register()
-	{
+	public function register() {
 		$this->app['profiler'] = $this->app->share(function($app) {
-            return new Profiler;
+            return new Profiler($app['view']);
         });
 	}
 
@@ -28,8 +36,7 @@ class ProfilerServiceProvider extends ServiceProvider {
 	 *
 	 * @return array
 	 */
-	public function provides()
-	{
+	public function provides() {
 		return array('profiler');
 	}
 
