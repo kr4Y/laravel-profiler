@@ -20,7 +20,7 @@ class ProfilerServiceProvider extends ServiceProvider {
         $this->package('kr4y/profiler');
 
         $app = $this->app;
-        $app->shutdown(function() use ($app) {
+        $app->finish(function() use ($app) {
         	echo $app['profiler']->getReport();
         });
     }
