@@ -18,8 +18,12 @@ class ProfilerServiceProvider extends ServiceProvider {
      */
     public function boot() {
         $this->package('kr4y/profiler');
-
         $app = $this->app;
+
+        $app['events']->listen('illuminate.query', function($sql, $bindings, $time) use($app) {
+            $app['profiler']->addQuery($sql, $bindings, $time);
+        });
+
         $app->finish(function() use ($app) {
         	echo $app['profiler']->getReport();
         });

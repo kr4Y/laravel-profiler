@@ -15,6 +15,11 @@ class Profiler {
      * @var int
      */
     protected $appStartTime;
+    /**
+     * Database queries
+     * @var array
+     */
+    protected $queries = array();
 
     /**
      * Create new profiler.
@@ -34,7 +39,10 @@ class Profiler {
      */
     public function getReport() {
         $totalTime = round(microtime(true) - $this->appStartTime, 5);
-        return $this->view->make('profiler::report', compact('totalTime'));
+        $totalQueries = count($this->queries);
+        $totalQueriesTime = $this->getTotalQueriesTime();
+
+        return $this->view->make('profiler::report', compact('totalTime', 'totalQueries', 'totalQueriesTime'));
     }
 
     /**
@@ -46,5 +54,17 @@ class Profiler {
             $this->appStartTime = LARAVEL_START;
         else
             $this->appStartTime = microtime(true);
+    }
+
+    public function addQuery($sql, $bindings, $time) {
+        array_push($this->queries, array(
+            'sql' => $sql,
+            'bindings' => $bindings,
+            'time' => $time
+        ));
+    }
+
+    private function getTotalQueriesTime() {
+        return array_sum(array_pluck($this->queries, 'time'));
     }
 }
