@@ -60,7 +60,7 @@ class Profiler {
         array_push($this->queries, array(
             'sql' => $sql,
             'bindings' => $bindings,
-            'time' => $time
+            'time' => round($time / 1000, 5)
         ));
     }
 
