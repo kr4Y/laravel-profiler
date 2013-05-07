@@ -43,8 +43,8 @@
         @endif
     </span>
     <div id="profiler-details" style="display: none;">
-        @foreach ($queries as $query)
-            {{{$query['query']}}} (<span class="time">{{$query['time']}}</span>)<br/>
+        @foreach ($queries as $num => $query)
+            {{$num + 1}}: {{{$query['query']}}} (<span class="time">{{$query['time']}}</span>)<br/>
         @endforeach
     </div>
 </div>
