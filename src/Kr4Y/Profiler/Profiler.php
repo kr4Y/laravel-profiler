@@ -38,11 +38,22 @@ class Profiler {
      * @return Illuminate\View\View
      */
     public function getReport() {
-        $totalTime = round(microtime(true) - $this->appStartTime, 5);
+        $totalTime = round(microtime(true) - $this->appStartTime, 3);
         $totalQueries = count($this->queries);
         $totalQueriesTime = $this->getTotalQueriesTime();
+        $queries = $this->queries;
+        $memoryUsage = round(memory_get_usage(true) / 1048576, 2);
+        $memoryPeakUsage = round(memory_get_peak_usage(true) / 1048576, 2);
 
-        return $this->view->make('profiler::report', compact('totalTime', 'totalQueries', 'totalQueriesTime'));
+        return $this->view->make('profiler::report', compact(
+                'totalTime',
+                'totalQueries',
+                'totalQueriesTime',
+                'queries',
+                'memoryUsage',
+                'memoryPeakUsage'
+            )
+        );
     }
 
     /**
@@ -58,9 +69,8 @@ class Profiler {
 
     public function addQuery($sql, $bindings, $time) {
         array_push($this->queries, array(
-            'sql' => $sql,
-            'bindings' => $bindings,
-            'time' => round($time / 1000, 5)
+            'time' => round($time / 1000, 3),
+            'query' => vsprintf(str_replace('?', '"%s"', $sql), $bindings)
         ));
     }
 
