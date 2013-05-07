@@ -42,16 +42,16 @@ class Profiler {
         $totalQueries = count($this->queries);
         $totalQueriesTime = $this->getTotalQueriesTime();
         $queries = $this->queries;
-        $memoryUsage = round(memory_get_usage(true) / 1048576, 2);
         $memoryPeakUsage = round(memory_get_peak_usage(true) / 1048576, 2);
+        $countFiles = count(get_included_files());
 
         return $this->view->make('profiler::report', compact(
                 'totalTime',
                 'totalQueries',
                 'totalQueriesTime',
                 'queries',
-                'memoryUsage',
-                'memoryPeakUsage'
+                'memoryPeakUsage',
+                'countFiles'
             )
         );
     }

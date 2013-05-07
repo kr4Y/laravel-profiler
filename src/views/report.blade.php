@@ -8,6 +8,7 @@
         color: #fff;
         padding: 3px;
         font-family: monospace;
+        cursor: pointer;
     }
     #profiler-report .time {
         color: #f0523f;
@@ -23,9 +24,6 @@
         background-repeat: no-repeat;
         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAOCAYAAAASVl2WAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAABp0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuMTAw9HKhAAAAoklEQVQoU2P4//8/AxrmBvJzgJgfJI4uCeLXAvFKmCZ0Bc5AiT9AnIJNgSxQ8BYQg4AuugIWoMB6qORpIM2DrgBkLwxcBDKSgTgbiB1AbggF4r9ICmDMn0CGF0jBZiC+A7X/H5LCIpA1IAWMUPuMkCQXo7sBpBDkNRAAuUEEmwJQ4ICADUwSZgVINydUZxmyJLICWyBnKroksgIFIAeEMeIGAJ1wcN8oijUsAAAAAElFTkSuQmCC);
     }
-    #profiler-report .header {
-        cursor: pointer;
-    }
     #profiler-report .orange {
         color: #f0523f;
     }
@@ -33,19 +31,20 @@
         padding-top: 5px;
     }
 </style>
-<div id="profiler-report">
-    <span class="header" onclick="toggle_profiler_details()">
-        Script <span class="time">{{$totalTime}}</span>s
-        :: Memory usage <span class="orange">{{$memoryUsage}}</span> Mb
-        :: Memory peak usage <span class="orange">{{$memoryPeakUsage}}</span> Mb
-        @if ($totalQueries > 0)
-            :: Queries <span class="queries">{{$totalQueries}}</span> <span class="time">{{$totalQueriesTime}}</span>s
-        @endif
-    </span>
+<div id="profiler-report" onclick="toggle_profiler_details()">
+    Script <span class="time">{{$totalTime}}</span>s
+    :: Memory usage <span class="orange">{{$memoryPeakUsage}}</span>Mb
+    :: Loaded files <span class="orange">{{$countFiles}}</span>
+    @if ($totalQueries > 0)
+        :: Queries <span class="queries">{{$totalQueries}}</span> <span class="time">{{$totalQueriesTime}}</span>s
+    @endif
     <div id="profiler-details" style="display: none;">
-        @foreach ($queries as $num => $query)
-            {{$num + 1}}: {{{$query['query']}}} (<span class="time">{{$query['time']}}</span>)<br/>
-        @endforeach
+        <span class="orange">Queries:</span>
+        <ol>
+            @foreach($queries as $num => $query)
+            <li>{{{$query['query']}}} (<span class="time">{{$query['time']}}</span>)</li>
+            @endforeach
+        </ol>
     </div>
 </div>
 <script>
