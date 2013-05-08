@@ -29,7 +29,7 @@ class ProfilerServiceProvider extends ServiceProvider {
                 $app['profiler']->addLogEvent($level, $message, $context);
             });
 
-            $app->finish(function() use ($app) {
+            $app->close(function() use ($app) {
             	echo $app['profiler']->getReport();
             });
         }
