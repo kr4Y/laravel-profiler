@@ -25,6 +25,10 @@ class ProfilerServiceProvider extends ServiceProvider {
                 $app['profiler']->addQuery($sql, $bindings, $time);
             });
 
+            $app['events']->listen('illuminate.log', function($level, $message, $context) use ($app) {
+                $app['profiler']->addLogEvent($level, $message, $context);
+            });
+
             $app->finish(function() use ($app) {
             	echo $app['profiler']->getReport();
             });
