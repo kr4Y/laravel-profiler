@@ -20,7 +20,7 @@ class ProfilerServiceProvider extends ServiceProvider {
         $this->package('kr4y/profiler');
         $app = $this->app;
 
-        if ($app['config']->get('profiler::enabled', true)) {
+        if ($app['env'] !== 'production' and $app['config']->get('profiler::enabled', true)) {
             $app['events']->listen('illuminate.query', function($sql, $bindings, $time) use($app) {
                 $app['profiler']->addQuery($sql, $bindings, $time);
             });
