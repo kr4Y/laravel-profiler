@@ -1,6 +1,6 @@
 {
     "name": "kr4y/profiler",
-    "version" : "0.0.1-dev",
+    "version" : "1.0",
     "description": "Profiler for Laravel 4",
     "license": "MIT",
     "keywords": ["profiler","laravel 4"],
