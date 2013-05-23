@@ -55,6 +55,16 @@
                     </ul>
                 </div>
             </div>
+            <div id="profiler-snapshots">
+                <a href="#profiler-snapshots">Snapshots</a>
+                <div>
+                    <ol>
+                        @foreach($snapshots as $name => $data)
+                        <li>{{{$name}}}: {{$data['time']}}s, {{$data['mem']}}kb</li>
+                        @endforeach
+                    </ol>
+                </div>
+            </div>
         </div>
     </div>
 </div>

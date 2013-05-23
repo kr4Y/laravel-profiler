@@ -25,6 +25,11 @@ class Profiler {
      * @var array
      */
     protected $logEvents = array();
+    /**
+     * Application snapshots
+     * @var array
+     */
+    protected $snapshots = array();
 
     /**
      * Create new profiler.
@@ -46,6 +51,24 @@ class Profiler {
             $this->appStartTime = LARAVEL_START;
         else
             $this->appStartTime = microtime(true);
+    }
+    /**
+     * Set start point for snapshot with name $pointName
+     * @param  string $pointName Name of Snapshot
+     */
+    public function startPoint($pointName) {
+        $this->snapshots[$pointName] = array(
+            'mem_start' => memory_get_usage(),
+            'time_start' => microtime(true),
+        );
+    }
+    /**
+     * Set end point for snapshot with name $pointName
+     * @param  string $pointName Name of Snapshot
+     */
+    public function endPoint($pointName) {
+        $this->snapshots[$pointName]['mem_end'] =  memory_get_usage();
+        $this->snapshots[$pointName]['time_end'] = microtime(true);
     }
     /**
      * Storing database query
@@ -96,7 +119,7 @@ class Profiler {
         sort($includedFiles);
         list($vendorFiles, $appFiles) = $this->splitFiles($includedFiles);
         $logEvents = $this->logEvents;
-
+        $snapshots = $this->createSnapshotsInfo();
         return $this->view->make('profiler::report', compact(
                 'totalTime',
                 'totalQueries',
@@ -106,9 +129,22 @@ class Profiler {
                 'countFiles',
                 'vendorFiles',
                 'appFiles',
-                'logEvents'
+                'logEvents',
+                'snapshots'
             )
         );
+    }
+    /**
+     * Calculate used memory and elapsed time
+     * @return array Calculated snapshots
+     */
+    protected function createSnapshotsInfo() {
+        $snapshots = array();
+        foreach ($this->snapshots as $name => $data) {
+            $snapshots[$name]['time'] = round(($data['time_end'] - $data['time_start']) / 1000, 3);
+            $snapshots[$name]['mem'] = round(($data['mem_end'] - $data['mem_start']) / 1024, 3);
+        }
+        return $snapshots;
     }
     /**
      * Calculate sum of queries time
@@ -123,7 +159,7 @@ class Profiler {
      * @return array        array of vendor files and application files
      */
     private function splitFiles($files) {
-        $path = str_replace('bootstrap/../app', '', app_path());
+        $path = base_path() . '\\';
         $appFiles = array();
         $vendorFiles = array();
 
