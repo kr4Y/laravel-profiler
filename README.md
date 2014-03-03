@@ -9,7 +9,7 @@ In `composer.json` file:
 ```json
 {
     "require-dev": {
-        "kr4y/profiler": "1.0.*"
+        "kr4y/profiler": "dev-master"
     },
 }
 ```
